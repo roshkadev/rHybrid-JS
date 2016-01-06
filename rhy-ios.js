@@ -9,9 +9,6 @@
  */
 (function(iOS, undefined) {
 
-    // A buffer to hold pending requests to the native code.
-    iOS.requestCache = [];
-
     //
     iOS.request = function(options) {
 
@@ -25,12 +22,20 @@
         // Else, we're dealing with a UIWebView.
         else
         {
-            // RSKNative.iOS.URLScheme holds the URLScheme for iOS and is
+            var params = [];
+            for (var p in options) {
+                if (options.hasOwnProperty(p)) {
+                    params.push(encodeURIComponent(p) + "=" +
+                            encodeURIComponent(options[p]));
+                    }
+            }
+            var queryString = params.join("&");
+             
+            // Rhy.iOS.URLScheme holds the URLScheme for iOS and is
             // injected by the native code beforehand.
             var src =
-                    window.Rhy.Config.URL_SCHEME +
-                    '://webview?' + 
-                    RSKUtils.makeQueryString(options);
+                    window.Rhy.Config.RHY_URL_SCHEME +
+                            '://webview?options=' + encodeURIComponent(JSON.stringify(options));
 
             // We use an iframe instead of setting window.location directly
             // so that the native code blocks and has a chance to set the
@@ -53,16 +58,18 @@
         var elem = document.getElementById('navbar') ?
                    document.getElementById('navbar') :
                    document.getElementsByTagName('body')[0];
+ 
         if (window.getComputedStyle) {
             colorCSS = window.getComputedStyle(elem, null).
                     getPropertyValue('background-color');
         } else if (elem.currentStyle) {
             colorCSS = elem.currentStyle['background-color']; 
         }
-        var colorRGB = colorCSS.slice(4, colorCSS.length - 1).split(",");
-        var red = parseInt(colorRGB[0]);
-        var green = parseInt(colorRGB[1]);
-        var blue = parseInt(colorRGB[2]);
+ 
+        var colorRGB = colorCSS.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/)
+        var red = parseInt(colorRGB[1]);
+        var green = parseInt(colorRGB[2]);
+        var blue = parseInt(colorRGB[3]);
         Rhy.iOS.request({
             setiOSStatusBarColorRed         : red,
             green                           : green,
