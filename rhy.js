@@ -99,9 +99,11 @@
      * @param {string} fileName         - The name of the HTML file to 
      *                                    open on the next screen.
      */
-    Rhy.newScreen = function(fileName) {
+    Rhy.newScreen = function(fileName, showNavigationBar) {
+        var navigationBar = showNavigationBar || false;
         nativeRequest({
-            newScreen           : fileName,    
+            newScreen           : fileName,
+            showNavigationBar   : navigationBar
         });
     };
 
@@ -316,9 +318,39 @@
         if (!options.okButtonTitle) {
             options.okButtonTitle = "Ok";
         }
+        if(!options.callPhone) {
+            options.callPhone = options.number;
+        }
         nativeRequest(options);
     };
+ 
+    Rhy.showNavigationBar = function(value) {
+        nativeRequest({
+            showNavigationBar: value,
+        });
+    }
+ 
+    Rhy.getValueForKey = function(key) {
+        return nativeRequest({
+            getValueForKey: key,
+        })
+    }
 
+    Rhy.setValueForKey = function(key, value) {
+        return nativeRequest({
+                             setValueForKey: key,
+                             value: value
+                             })
+    }
+ 
+    Rhy.showAlert = function (title, message, okButtonTitle) {
+ var options = {'showAlert': message, 'title': title, 'button_text': okButtonTitle};
+        return nativeRequest(options);
+    }
+ 
+ Rhy.showDatePicker = function() {
+    return nativeRequest();
+ }
 })(window.Rhy = window.Rhy || {});
 
 

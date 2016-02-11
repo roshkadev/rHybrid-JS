@@ -28,8 +28,9 @@
             // RSKNative.iOS.URLScheme holds the URLScheme for iOS and is
             // injected by the native code beforehand.
             var src =
-                    window.Rhy.Config.URL_SCHEME +
-                    '://webview?' + 
+                    //window.Rhy.Config.URL_SCHEME +
+                    "rhybrid" +
+                    '://webview?' +
                     RSKUtils.makeQueryString(options);
 
             // We use an iframe instead of setting window.location directly
@@ -69,7 +70,9 @@
             blue                            : blue,
         });
     };
+ 
 
+ 
 })(window.Rhy.iOS = window.Rhy.iOS || {});
 
 
