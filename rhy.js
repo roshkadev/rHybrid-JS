@@ -133,6 +133,13 @@
      * @param {function} openFileName    - The file to open. 
      */
     Rhy.createMenu = function(menuFileName, openFileName, menuMargin) {
+ 
+        // If the size was passed in, in rem units, e.g. '3.2rem', convert it to px.
+        if (menuMargin.indexOf('rem', menuMargin.length - 'rem'.length) !== -1) {
+            var size = getComputedStyle(document.documentElement).fontSize;
+            menuMargin = parseInt(parseFloat(menuMargin) * parseFloat(size));
+        }
+ 
         nativeRequest({
             createMenu          : menuFileName,    
             openFileName        : openFileName,
