@@ -73,7 +73,7 @@
         var green = parseInt(colorRGB[2]);
         var blue = parseInt(colorRGB[3]);
         Rhy.iOS.request({
-            setiOSStatusBarColorRed         : red,
+            setiOSStatusBarColor         : red,
             green                           : green,
             blue                            : blue,
         });

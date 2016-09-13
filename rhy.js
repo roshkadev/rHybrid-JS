@@ -109,11 +109,9 @@
      * @param {string} fileName         - The name of the HTML file to 
      *                                    open on the next screen.
      */
-    Rhy.newScreen = function(fileName, showNavigationBar) {
-        var navigationBar = showNavigationBar || false;
+    Rhy.newScreen = function(fileName) {
         nativeRequest({
-            newScreen           : fileName,
-            showNavigationBar   : navigationBar
+            newScreen           : fileName
         });
     };
 
@@ -360,14 +358,34 @@
                              })
     }
  
-    Rhy.showAlert = function (title, message, okButtonTitle) {
- var options = {'showAlert': message, 'title': title, 'button_text': okButtonTitle};
+    Rhy.showAlert = function (title, message, okButtonTitle, callback) {
+        var options = {'showAlert': message, 'title': title, 'button_text': okButtonTitle};
+ 
+        if(callback) {
+            options.callback = callback;
+        }
         return nativeRequest(options);
     }
  
- Rhy.showDatePicker = function() {
-    return nativeRequest();
- }
+    Rhy.showDatePicker = function() {
+        return nativeRequest();
+    }
+ 
+    Rhy.logout = function() {
+        return nativeRequest({'logout': 'YES'});
+    }
+ 
+ 
+    Rhy.showConfirmDialog = function(message, okbutton, cancelbutton, callback) {
+        return nativeRequest({'showConfirmDialog': message,
+                             'buttonOk': okbutton,
+                             'buttonCancel': cancelbutton,
+                             'callback': callback});
+    }
+//    RHY.setiOSStatusBarColor = function (red, green, blue) {
+//        var options = {'setiOSStatusBarColor': red, 'green': green, 'blue': blue}
+//        return nativeRequest(options);
+//    }
 })(window.Rhy = window.Rhy || {});
 
 
